@@ -70,7 +70,7 @@ A full-stack School Management System built using the MERN stack. The applicatio
 
 ```bash
 # Clone the repository
-git clone https://github.com/Aman8221-del/school-management-system-mern.git
+git clone https://github.com/Aman8221-del/school-management-system.git
 
 # Install dependencies
 npm install
