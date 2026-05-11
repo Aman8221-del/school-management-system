@@ -13,19 +13,21 @@ const Studentdashbord = () => {
         return <Students />;
       case "Attendence":
         return <Teachers />;
-        case "Notices":
-          return <Studentnotices/>
-        default:
-          return <StudentDashboardHome/>
+      case "Notices":
+        return <Studentnotices />;
+      default:
+        return <StudentDashboardHome />;
     }
   };
   return (
     <>
-      <div className="flex">
+      <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
-        <Sidebar setPage={setpage} role="student" />
+        <div className="w-64 flex-shrink-0">
+          <Sidebar setPage={setpage} role="student" />
+        </div>
         {/* main Content */}
-        <div className="flex-1 p-6 bg-gray-100 min-h-screen">
+        <div className="flex-1 overflow-y-auto bg-gray-100 p-6">
           <PageRenderer />
         </div>
       </div>

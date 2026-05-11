@@ -20,19 +20,18 @@ const Teacherdashbord = () => {
       case "Applications":
         return <LeaveApplication />;
       default:
-        return;
+        return <TeacherDashboardHome />;
     }
   };
   return (
     <>
-     
-
-      <div className="flex">
+      <div className="flex h-screen overflow-hidden">
         {/* sidebar  */}
-        <Sidebar setPage={setPage} role="teacher" />
-
+        <div className="w-64 flex-shrink-0">
+          <Sidebar setPage={setPage} role="teacher" />
+        </div>
         {/* main content  */}
-        <div className="flex-1 p-6 bg-gray-100 min-h-screen">
+        <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
           <PageRenderer />
         </div>
       </div>

@@ -5,16 +5,25 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
 
-  // 🔥 1st se 12th tak classes generate
-  const classes = Array.from({ length: 12 }, (_, i) => `${i + 1}th`);
+  const [classes, setClasses] = useState([]);
 
-  // Fetch students
-  const fetchStudents = async (cls = "") => {
+  // 🔥 Fetch classes (from DB)
+  const fetchClasses = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/class/class");
+      setClasses(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 🔥 Fetch students
+  const fetchStudents = async (classId = "") => {
     try {
       let url = "http://localhost:4000/?role=student";
 
-      if (cls) {
-        url += `&standerd=${cls}`;
+      if (classId) {
+        url += `&classId=${classId}`;
       }
 
       const res = await axios.get(url);
@@ -25,31 +34,33 @@ const Students = () => {
   };
 
   useEffect(() => {
+    fetchClasses();
     fetchStudents();
   }, []);
 
-  // Class click
-  const handleClassClick = (cls) => {
-    setSelectedClass(cls);
-    fetchStudents(cls);
+  // 🔥 Class click
+  const handleClassClick = (classId) => {
+    setSelectedClass(classId);
+    fetchStudents(classId);
   };
 
   return (
     <div>
-      
       <h1 className="text-2xl font-bold mb-6">Students</h1>
 
       {/* 🔥 Class Buttons */}
       <div className="mb-4 flex flex-wrap gap-2">
         {classes.map((cls) => (
           <button
-            key={cls}
-            onClick={() => handleClassClick(cls)}
+            key={cls._id}
+            onClick={() => handleClassClick(cls._id)}
             className={`px-3 py-1 rounded ${
-              selectedClass === cls ? "bg-blue-600 text-white" : "bg-gray-200"
+              selectedClass === cls._id
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200"
             }`}
           >
-            {cls}
+            {cls.className}-{cls.section}
           </button>
         ))}
 
@@ -67,15 +78,14 @@ const Students = () => {
 
       {/* 🔥 Students Table */}
       <div className="bg-white p-4 rounded shadow">
-        <search>search</search>
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-200">
               <th className="p-2 border">Name</th>
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Class</th>
-              <th className="p-2 border">Father's name</th>
-              <th className="p-2 border">Rollno</th>
+              <th className="p-2 border">Father's Name</th>
+              <th className="p-2 border">Roll No</th>
               <th className="p-2 border">Phone</th>
             </tr>
           </thead>
@@ -86,7 +96,9 @@ const Students = () => {
                 <tr key={stu._id} className="text-center">
                   <td className="p-2 border">{stu.name}</td>
                   <td className="p-2 border">{stu.email}</td>
-                  <td className="p-2 border">{stu.standerd}</td>
+                  <td className="p-2 border">
+                    {stu.classId?.className}-{stu.classId?.section}
+                  </td>
                   <td className="p-2 border">{stu.fathername}</td>
                   <td className="p-2 border">{stu.rollno}</td>
                   <td className="p-2 border">{stu.phone}</td>
@@ -94,7 +106,7 @@ const Students = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center p-4">
+                <td colSpan="6" className="text-center p-4">
                   No Students Found
                 </td>
               </tr>

@@ -24,6 +24,9 @@ app.use("/query", contactQueryrouter);
 const Applicationrouter = require("./Routes/Application.route");
 app.use("/application", Applicationrouter);
 
+const ClassesRouter = require("./Routes/Classes.route");
+app.use("/class", ClassesRouter);
+
 app.listen("4000", (req, res) => {
   console.log("server started at 4000");
 });

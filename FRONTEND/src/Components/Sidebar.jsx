@@ -13,8 +13,6 @@ const Sidebar = ({ setPage, role }) => {
       "Fees",
       "Applications",
       "Notices",
-      "Admins",
-      "Settings",
     ],
     teacher: [
       "Dashboard",
@@ -30,7 +28,7 @@ const Sidebar = ({ setPage, role }) => {
 
   return (
     <>
-      <div className="w-64 h-screen bg-gray-900 text-white p-5">
+      <div className="w-64 fixed h-screen overflow-y-auto bg-gray-900 text-white p-5">
         {/* Logo / Title */}
         <h1 className="text-2xl font-bold mb-6 capitalize">{role} panel</h1>
         {/* Menu */}

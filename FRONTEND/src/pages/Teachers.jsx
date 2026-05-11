@@ -12,9 +12,9 @@ const Teachers = () => {
     username: "",
     password: "",
     phone: "",
-    standerd: "",
+
     subject: "",
-  }); 
+  });
 
   // Fetch Teachers
   const fetchTeachers = async () => {
@@ -43,7 +43,7 @@ const Teachers = () => {
       username: "",
       password: "",
       phone: "",
-      standerd: "",
+
       subject: "",
     });
     setEditId(null);
@@ -149,13 +149,7 @@ const Teachers = () => {
               placeholder="Subject"
               className="border p-2"
             />
-            <input
-              name="standerd"
-              value={formData.standerd}
-              onChange={handleChange}
-              placeholder="Class"
-              className="border p-2"
-            />
+
             <input
               name="phone"
               value={formData.phone}

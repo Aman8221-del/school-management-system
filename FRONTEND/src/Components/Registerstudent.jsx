@@ -3,18 +3,34 @@ import React from "react";
 import "./App.css";
 import axios from "axios";
 import studentimage from "../assets/students.jpg";
+import { useEffect } from "react";
 
 const Register = () => {
+  const [classes, setClasses] = useState([]);
   const [name, setname] = useState();
-  const [role, setRole] = useState();
+  const [role, setRole] = useState("student");
   const [username, setusername] = useState();
   const [email, setemail] = useState();
   const [password, setpassword] = useState();
   const [fathername, setfathername] = useState();
   const [age, setage] = useState();
   const [rollno, setrollno] = useState();
-  const [standerd, setstanderd] = useState();
+  const [classId, setclassId] = useState();
   const [phone, setphone] = useState();
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const res = await axios.get("http://localhost:4000/class/class");
+        console.log(res.data);
+        setClasses(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
 
   const Registerstudent = async (e) => {
     e.preventDefault();
@@ -27,7 +43,7 @@ const Register = () => {
         fathername,
         age,
         rollno,
-        standerd,
+        classId,
         role,
         phone,
       });
@@ -52,7 +68,7 @@ const Register = () => {
         <form
           onSubmit={Registerstudent}
           className="bg-white/70 backdrop-blur-md p-5 mt-6 rounded-2xl shadow-lg w-full max-w-2xl"
-        > 
+        >
           <h2 className="text-3xl font-bold mb-3 text-center text-blue-600">
             Student Registration
           </h2>
@@ -144,10 +160,18 @@ const Register = () => {
             {/* Class */}
             <div>
               <label className="block font-medium">Class</label>
-              <input
-                onChange={(e) => setstanderd(e.target.value)}
+              <select
                 className="w-full border p-2 rounded-lg"
-              />
+                onChange={(e) => setclassId(e.target.value)}
+              >
+                <option value="">Select Class</option>
+
+                {classes.map((item) => (
+                  <option key={item._id} value={item._id}>
+                    {item.className} - {item.section}
+                  </option>
+                ))}
+              </select>
             </div>
             {/*phone*/}
             <div>

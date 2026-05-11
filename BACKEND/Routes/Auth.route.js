@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const Model = require("../models/Schema.model");
+const classesModel = require("../models/ClassesSchema.model");
 const authmiddleware = require("../middelware/authmiddleware");
 
 router.post("/signup", async (req, res) => {
@@ -25,7 +26,7 @@ router.post("/signup", async (req, res) => {
     if (!data.role) {
       data.role = "student";
     }
-    console.log(data.role);
+
     if (data.role === "admin") {
       return res.status(403).json({ message: "Not allowed" });
     }
@@ -33,7 +34,7 @@ router.post("/signup", async (req, res) => {
     // role base validation
 
     if (data.role === "student") {
-      if (!data.age || !data.standerd || !data.fathername || !data.rollno) {
+      if (!data.age || !data.classId || !data.fathername || !data.rollno) {
         return res.status(400).json({ message: "student field required" });
       }
     }
@@ -84,17 +85,19 @@ router.post("/login", async (req, res) => {
 // get all users
 
 router.get("/", async (req, res) => {
-  const { role, standerd } = req.query;
-  let users;
-  if (role && standerd) {
-    users = await Model.find({ role: role, standerd: standerd });
-  } else if (role) {
-    users = await Model.find({ role: role });
-  } else {
-    users = await Model.find();
+  const { role, classId } = req.query;
+
+  let query = {};
+
+  if (role) query.role = role;
+
+  if (classId) {
+    query.classId = classId;
   }
 
-  // console.log(users);
+  const users = await Model.find(query)
+    .populate("classId", "className section");
+
   res.json(users);
 });
 
@@ -115,7 +118,7 @@ router.get("/dashboard-stats", async (req, res) => {
   const totalStudents = await Model.countDocuments({ role: "student" });
   const totalTeachers = await Model.countDocuments({ role: "teacher" });
 
-  const totalClasses = await Model.distinct("standerd"); // unique classes
+  const totalClasses = await classesModel.distinct("className"); // unique classes
   // const totalAttendance = await TeacherAttendance.countDocuments();
 
   res.json({
@@ -124,6 +127,21 @@ router.get("/dashboard-stats", async (req, res) => {
     totalClasses: totalClasses.length,
     // totalAttendance,
   });
+});
+
+// teacher ke liye class fetch
+
+router.get("/my-classes", authmiddleware, async (req, res) => {
+  try {
+    const teacherId = req.user.id;
+
+    const classes = await classesModel.find({
+      classTeacher: teacherId,
+    });
+    res.json(classes);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // for Approve
@@ -137,10 +155,10 @@ router.put("/:id", async (req, res) => {
       runValidators: true,
     });
     if (!response) return res.status(404).json({ message: "user not found" });
-    res.status(201).json({message:"data updated successfully", response})
+    res.status(201).json({ message: "data updated successfully", response });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({message:"Internal server error"})
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

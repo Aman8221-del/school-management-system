@@ -6,6 +6,7 @@ import Teachers from "../pages/Teachers";
 import AdminNotices from "../pages/AdminNotices";
 import Managers from "../pages/Managers";
 import AdminApplications from "../pages/AdminApplicationsDashboard";
+import Classes from "../pages/Classes";
 
 const AdminDashboard = () => {
   const [page, setPage] = useState("Dashboard");
@@ -23,23 +24,25 @@ const AdminDashboard = () => {
         return <Managers />;
       case "Applications":
         return <AdminApplications />;
+      case "Classes":
+        return <Classes />;
       default:
         return <DashboardHome />;
     }
   };
 
   return (
-    <>
-      <div className="flex">
-        {/* Sidebar */}
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-64 flex-shrink-0">
         <Sidebar setPage={setPage} role="admin" />
-
-        {/* Main Content */}
-        <div className="flex-1 p-6 bg-gray-100 min-h-screen">
-          <PageRenderer />
-        </div>
       </div>
-    </>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto bg-gray-100 p-6">
+        <PageRenderer />
+      </div>
+    </div>
   );
 };
 

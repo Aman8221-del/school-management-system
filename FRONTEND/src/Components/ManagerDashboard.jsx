@@ -4,6 +4,7 @@ import Students from "../pages/Students";
 import Queryspage from "../pages/Queryspage";
 import Teachersnotice from "../pages/Teachersnotice";
 import LeaveApplication from "../pages/LeaveApplication";
+import ManagerDashboardHome from "./ManagerDashboardHome";
 
 const ManagerDashboard = () => {
   const [page, setPage] = useState("Dashboard");
@@ -18,6 +19,7 @@ const ManagerDashboard = () => {
         case "Applications":
           return <LeaveApplication/>
       default:
+        return <ManagerDashboardHome/>
     }
   };
   return (

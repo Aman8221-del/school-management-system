@@ -10,7 +10,11 @@ const ModelSchema = new mongoose.Schema(
     username: {
       type: String,
       required: function () {
-        return this.role === "student" || this.role === "teacher" || this.role === "admin";
+        return (
+          this.role === "student" ||
+          this.role === "teacher" ||
+          this.role === "admin"
+        );
       },
       lowercase: true,
       unique: true,
@@ -25,10 +29,11 @@ const ModelSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
     },
-    standerd: {
-      type: String,
+    classId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "class",
       required: function () {
-        return this.role === "student" || this.role==="teacher";
+        return this.role === "student";
       },
     },
     rollno: {
@@ -53,18 +58,22 @@ const ModelSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    phone:{
-      type:Number,
-      required:function(){
-        return this.role ==="student" || this.role==="teacher" || this.role==="manager"
-      }
+    phone: {
+      type: Number,
+      required: function () {
+        return (
+          this.role === "student" ||
+          this.role === "teacher" ||
+          this.role === "manager"
+        );
+      },
     },
-    subject:{
-      type:String,
-      required:function(){
-        return this.role==="teacher"
-      }
-    }
+    subject: {
+      type: String,
+      required: function () {
+        return this.role === "teacher";
+      },
+    },
   },
   { timestamps: true },
 );
